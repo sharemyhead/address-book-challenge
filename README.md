@@ -31,7 +31,7 @@ This project uses `gradle` for dependency management and `make` for building & r
  
 #### Build - Compiles, runs unit tests and packages the api
 1. Using Makefile `make build`
-2. Using Gradle `./gradlew build`
+2. Using Gradle `./gradlew clean build`
 
 #### Running the application
 1. Using Makefile `make run`
@@ -43,7 +43,7 @@ This project uses `gradle` for dependency management and `make` for building & r
 
 1. Java Application, written in Java8
 2. Redis - persistence layer to store the address books and the contacts. The redis container is started using the appendonly flag set to `true` so that the container volume survives restarts.
-3. Redis Commander - To visualise the entries stored in Redis.
+3. Redis Commander - To visualise the entries stored in Redis. Go to http://localhost:8081 
 
 ## Usage of the App
 
