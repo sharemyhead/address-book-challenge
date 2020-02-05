@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -44,12 +45,12 @@ public class AddressBookService {
     }
 
     public Set<Contact> compareContacts(String bookName1, String bookName2) throws NoSuchBookException {
-        Map<Contact, Integer> contactCounter = new HashMap<>();
-        Set<Contact> contacts1 = this.getAddressBook(bookName1);
-        Set<Contact> contacts2 = this.getAddressBook(bookName2);
+        Map<Contact, Integer> contactCounter = new TreeMap<>();
+        SortedSet<Contact> contacts1 = this.getAddressBook(bookName1);
+        SortedSet<Contact> contacts2 = this.getAddressBook(bookName2);
         contacts1.forEach(contact -> contactCounter.put(contact, contactCounter.getOrDefault(contact, 0) + 1));
         contacts2.forEach(contact -> contactCounter.put(contact, contactCounter.getOrDefault(contact, 0) + 1));
-        return contactCounter.entrySet().stream().filter(entry -> entry.getValue() == 1).map(Map.Entry::getKey).collect(Collectors.toSet());
+        return new TreeSet<>(contactCounter.entrySet().stream().filter(entry -> entry.getValue() == 1).map(Map.Entry::getKey).collect(Collectors.toSet()));
     }
 
     public SortedSet<Contact> getAddressBook(String bookName) throws NoSuchBookException {

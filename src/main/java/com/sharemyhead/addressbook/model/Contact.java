@@ -19,8 +19,8 @@ public class Contact implements Comparable<Contact> {
 
     @Override
     public int compareTo(Contact contact) {
-        String compareStrCurrent = this.getFullName() + this.getPhoneNumber();
-        String compareStrContact = contact.getFullName() + contact.getPhoneNumber();
+        String compareStrCurrent = this.getFullName().toUpperCase() + this.getPhoneNumber();
+        String compareStrContact = contact.getFullName().toUpperCase() + contact.getPhoneNumber();
         return compareStrCurrent.compareTo(compareStrContact);
     }
 }
