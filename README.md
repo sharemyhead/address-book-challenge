@@ -45,3 +45,25 @@ This project uses `gradle` for dependency management and `make` for building & r
 2. Redis - persistence layer to store the address books and the contacts. The redis container is started using the appendonly flag set to `true` so that the container volume survives restarts.
 3. Redis Commander - To visualise the entries stored in Redis.
 
+## Usage of the App
+
+On running the app, you will get the following menu
+
+```Address Book Main Menu
+   Choose from the following commands: [list | create | add | contacts | compare | exit]
+   ------------------------------------------------------------------------------------------------------------------
+       list                            list all books
+       create                          create a new book
+       add                             add a contact to a book
+       contacts                        list all contacts in a book
+       compare                         Compare 2 books to list the contacts that are unique to each address book'
+       exit                            exit the program
+   ------------------------------------------------------------------------------------------------------------------
+```
+
+- On chosing `list`, you will have to enter a book name which exists
+- On chosing `create`, you will have to enter a book name that does not already exist
+- `add` lets you create a contact inside a book
+- `contacts` lets you view the contacts inside a book
+- `compare` lets you compare the contents of 2 address books that exist
+- `exit` is pretty self explanatory, exits the program
