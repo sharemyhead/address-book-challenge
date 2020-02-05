@@ -1,0 +1,73 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+import org.apache.commons.io.FileUtils
+
+buildscript {
+	repositories { jcenter() }
+	dependencies { classpath "commons-io:commons-io:2.5" }
+}
+
+task downloadGeckoDriver {
+	def driverFilenameExtension = Os.isFamily(Os.FAMILY_WINDOWS) ? ".zip" : ".tar.gz"
+	
+	def driverFileName = "./webdriver/geckodriver" + driverFilenameExtension
+	def outputFile = file(driverFileName)
+	
+	inputs.property("geckodriver", geckoDriverVersion)
+	outputs.file(outputFile)
+
+	doLast {
+		if (!outputFile.exists()) {
+			def driverOsFilenamePart
+			if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+				driverOsFilenamePart = "win64"
+			} else if (Os.isFamily(Os.FAMILY_MAC)) {
+				driverOsFilenamePart = "macos"
+			} else if (Os.isFamily(Os.FAMILY_UNIX)) {
+				driverOsFilenamePart = "linux64"
+			}
+			FileUtils.copyURLToFile(new URL("https://github.com/mozilla/geckodriver/releases/download/v${geckoDriverVersion}/geckodriver-v${geckoDriverVersion}-${driverOsFilenamePart}${driverFilenameExtension}"), outputFile)
+		}
+	}
+}
+
+task unzipGeckoDriver(type: Copy) {
+	dependsOn downloadGeckoDriver
+
+	def outputDir = file("./webdriver/geckodriver")
+	outputs.dir(outputDir)
+
+	def archive = downloadGeckoDriver.outputs.files.singleFile
+	
+	from(Os.isFamily(Os.FAMILY_WINDOWS) ? zipTree(archive) : tarTree(archive))
+	into(outputDir)
+}
+
+task downloadChromeDriver {
+	def outputFile = file("./webdriver/chromedriver.zip")
+	inputs.property("chromeDriverVersion", chromeDriverVersion)
+	outputs.file(outputFile)
+
+	doLast {
+		if (!outputFile.exists()) {
+			def driverOsFilenamePart
+			if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+				driverOsFilenamePart = "win32"
+			} else if (Os.isFamily(Os.FAMILY_MAC)) {
+				driverOsFilenamePart = "mac64"
+			} else if (Os.isFamily(Os.FAMILY_UNIX)) {
+				driverOsFilenamePart = Os.isArch("amd64") ? "linux64" : "linux32"
+			}
+			FileUtils.copyURLToFile(new URL("http://chromedriver.storage.googleapis.com/${chromeDriverVersion}/chromedriver_${driverOsFilenamePart}.zip"), outputFile)
+		}
+	}
+}
+
+task unzipChromeDriver(type: Copy) {
+	dependsOn downloadChromeDriver
+
+	def outputDir = file("./webdriver/chromedriver")
+	outputs.dir(outputDir)
+
+	from(zipTree(downloadChromeDriver.outputs.files.singleFile))
+	into(outputDir)
+}
