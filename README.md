@@ -37,7 +37,7 @@ This project uses `gradle` for dependency management and `make` for building & r
 1. Using Makefile `make run`
 2. Starting components individually
     * `docker-compose up -d` - to start the redis container and the redis-commander container 
-    * `./gradlew build` - to start the application
+    * `java -jar build/libs/*.jar` - to start the application
 
 ## Components
 
